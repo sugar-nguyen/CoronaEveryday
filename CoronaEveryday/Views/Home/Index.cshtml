@@ -1,0 +1,288 @@
+﻿@model CoronaEveryday.Models.CoronaRecieve
+
+@{
+    ViewData["Title"] = "IndexAsync";
+}
+<style>
+    .line-header {
+        height: 30px;
+        background: none;
+        line-height: 30px;
+    }
+
+        .line-header .title-header {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+    .line-box-number {
+        margin-top: 10px;
+    }
+
+        .line-box-number .box-number {
+            border-radius: 6px;
+            box-shadow: 2px 4px 7px 2px #b1a9a9;
+            height: 50px;
+            overflow: hidden;
+            background-color: #fff;
+        }
+
+
+
+    .box-number .title {
+        font-size: 11px;
+        padding-left: 5px;
+        padding-top: 3px;
+        font-weight: bold;
+    }
+
+    .box-number .number {
+        font-size: 15px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 3px;
+        color: #464545;
+    }
+
+    .box-number .left-column, .box-number .right-column {
+        float: left;
+    }
+
+    .box-number .left-column {
+        height: 100%;
+        width: 2%;
+    }
+
+    .box-number .right-column {
+        width: 98%;
+    }
+
+    .line-box-number .new-confirm .left-column {
+        background-color: #cb31f1;
+    }
+
+    .line-box-number .new-confirm .right-column .title {
+        color: #cb31f1;
+    }
+
+    .line-box-number .total-confirm .left-column {
+        background-color: #ff0052;
+    }
+
+    .line-box-number .total-confirm .right-column .title {
+        color: #ff0052;
+    }
+
+    .line-box-number .new-death .left-column {
+        background-color: #0066ff;
+    }
+
+    .line-box-number .new-death .right-column .title {
+        color: #0066ff;
+    }
+
+    .line-box-number .total-death .left-column {
+        background-color: #38a3a9;
+    }
+
+    .line-box-number .total-death .right-column .title {
+        color: #38a3a9;
+    }
+
+    .line-box-number .new-recovered .left-column {
+        background-color: #bfb538;
+    }
+
+    .line-box-number .new-recovered .right-column .title {
+        color: #bfb538;
+    }
+
+    .line-box-number .total-recovered .left-column {
+        background-color: #03a9f4;
+    }
+
+    .line-box-number .total-recovered .right-column .title {
+        color: #03a9f4;
+    }
+
+
+    .table-panel {
+        border-radius: 10px;
+        box-shadow: 2px 4px 7px 2px #b1a9a9;
+        margin-top: 20px;
+        overflow: hidden;
+        background-color: #fff;
+        padding-bottom: 20px;
+    }
+
+        .table-panel .line-header {
+            padding-left: 10px;
+        }
+
+    #table-country {
+        overflow: auto;
+        height: 400px;
+        margin-top: 20px;
+    }
+
+        #table-country table {
+            font-size: 11px;
+        }
+</style>
+<div class="row">
+    <div class="colg-12 line-header"><span class="title-header">Tổng quan</span></div>
+</div>
+
+<div class="row line-box-number">
+
+    <div class="col-sm">
+        <div class="box-number new-confirm">
+            <div class="left-column">&nbsp;</div>
+            <div class="right-column">
+                <div class="title">@Html.DisplayNameFor(x => x.Global.NewConfirmed)</div>
+                <div class="number"> @Html.DisplayFor(x => x.Global.NewConfirmed)</div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="box-number total-confirm">
+            <div class="left-column">&nbsp;</div>
+            <div class="right-column">
+                <div class="title">@Html.DisplayNameFor(x => x.Global.TotalConfirmed)</div>
+                <div class="number">@Html.DisplayFor(x => x.Global.TotalConfirmed)</div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="box-number new-death">
+            <div class="left-column">&nbsp;</div>
+            <div class="right-column">
+                <div class="title">@Html.DisplayNameFor(x => x.Global.NewDeaths)</div>
+                <div class="number">@Html.DisplayFor(x => x.Global.NewDeaths)</div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="box-number total-death">
+            <div class="left-column">&nbsp;</div>
+            <div class="right-column">
+                <div class="title">@Html.DisplayNameFor(x => x.Global.TotalDeaths)</div>
+                <div class="number">@Html.DisplayFor(x => x.Global.TotalDeaths)</div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="box-number new-recovered">
+            <div class="left-column">&nbsp;</div>
+            <div class="right-column">
+                <div class="title">@Html.DisplayNameFor(x => x.Global.NewRecovered)</div>
+                <div class="number">@Html.DisplayFor(x => x.Global.NewRecovered)</div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="box-number total-recovered">
+            <div class="left-column">&nbsp;</div>
+            <div class="right-column">
+                <div class="title">@Html.DisplayNameFor(x => x.Global.TotalRecovered)</div>
+                <div class="number">@Html.DisplayFor(x => x.Global.TotalRecovered)</div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<div class="row  table-panel">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="colg-12 line-header"><span class="title-header">Danh sách chi tiết</span></div>
+        </div>
+        <div id="table-country">
+            <table class="table-sm table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Countries[0].Country)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Countries[0].CountryCode)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Countries[0].NewConfirmed)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Countries[0].TotalConfirmed)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Countries[0].NewDeaths)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Countries[0].TotalDeaths)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Countries[0].NewRecovered)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Countries[0].TotalRecovered)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Countries[0].Date)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Countries)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Country)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CountryCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NewConfirmed)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TotalConfirmed)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NewDeaths)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TotalDeaths)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NewRecovered)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TotalRecovered)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Date)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        (function ($) {
+            //     $('#table-country').load('/Home/TableDetail');
+        })($)
+    </script>
+}
