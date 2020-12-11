@@ -26,8 +26,16 @@ namespace CoronaEveryday.Controllers
 
         public async Task<IActionResult> Index()
         {
+            
             var model = await _client.GetSummaryAsync();
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetJsonCountry()
+        {
+            var model = await _client.GetSummaryAsync();
+            return Json(model.Countries.OrderByDescending(x=>x.NewConfirmed));
         }
 
         public IActionResult Privacy()

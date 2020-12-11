@@ -28,7 +28,7 @@ namespace CoronaEveryday.Data
             {
 
                 var response = Client.GetAsync("/summary").Result;
-                var json =  response.Content.ReadAsStreamAsync().Result;
+                var json = response.Content.ReadAsStreamAsync().Result;
 
                 return await JsonSerializer.DeserializeAsync<CoronaRecieve>(json);
 

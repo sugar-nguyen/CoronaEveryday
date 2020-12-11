@@ -1,157 +1,8 @@
 ﻿@model CoronaEveryday.Models.CoronaRecieve
 
 @{
-    ViewData["Title"] = "IndexAsync";
+    ViewData["Title"] = "Covid-19 Everyday";
 }
-<style>
-    .line-header {
-        height: 40px;
-        background: none;
-        line-height: 40px;
-    }
-
-        .line-header .title-header {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-    .line-box-number {
-        margin-top: 10px;
-    }
-
-        .line-box-number .box-number {
-            border-radius: 6px;
-            box-shadow: 2px 4px 7px 2px #b1a9a9;
-            height: 50px;
-            overflow: hidden;
-            background-color: #fff;
-        }
-.line-box-number .box-outline{
-    padding:0;
-    margin-left: 10px;;
-}
-.line-box-number .box-outline:first-child{
-    margin-left: 0;
-}
-
-
-    .box-number .title {
-        font-size: 11px;
-        padding-left: 5px;
-        padding-top: 3px;
-        font-weight: bold;
-    }
-
-    .box-number .number {
-        font-size: 15px;
-        font-weight: bold;
-        text-align: center;
-        margin-top: 3px;
-        color: #464545;
-    }
-
-    .box-number .left-column, .box-number .right-column {
-        float: left;
-    }
-
-    .box-number .left-column {
-        height: 100%;
-        width: 2%;
-    }
-
-    .box-number .right-column {
-        width: 98%;
-    }
-
-    .line-box-number .new-confirm .left-column {
-        background-color: #cb31f1;
-    }
-
-    .line-box-number .new-confirm .right-column .title {
-        color: #cb31f1;
-    }
-
-    .line-box-number .total-confirm .left-column {
-        background-color: #ff0052;
-    }
-
-    .line-box-number .total-confirm .right-column .title {
-        color: #ff0052;
-    }
-
-    .line-box-number .new-death .left-column {
-        background-color: #0066ff;
-    }
-
-    .line-box-number .new-death .right-column .title {
-        color: #0066ff;
-    }
-
-    .line-box-number .total-death .left-column {
-        background-color: #38a3a9;
-    }
-
-    .line-box-number .total-death .right-column .title {
-        color: #38a3a9;
-    }
-
-    .line-box-number .new-recovered .left-column {
-        background-color: #bfb538;
-    }
-
-    .line-box-number .new-recovered .right-column .title {
-        color: #bfb538;
-    }
-
-    .line-box-number .total-recovered .left-column {
-        background-color: #03a9f4;
-    }
-
-    .line-box-number .total-recovered .right-column .title {
-        color: #03a9f4;
-    }
-
-
-    .table-panel, .bar-chart {
-        border-radius: 10px;
-        box-shadow: 2px 4px 7px 2px #b1a9a9;
-        margin-top: 20px;
-        overflow: hidden;
-        background-color: #fff;
-        padding-bottom: 20px;
-    }
-
-
-    #table-country {
-        overflow: auto;
-        height: 400px;
-        margin-top: 20px;
-    }
-
-        #table-country table {
-            font-size: 11px;
-        }
-        table thead tr th{
-            text-align: center;
-            background-color: #c0d6e8;
-        }
-     #table-country   table tbody td, #table-country table thead th{
-            padding:5px !important;
-            vertical-align:middle !important;
-        }
-
-
-        #table-country #table-detail_paginate .paginate_button{
-    background: linear-gradient(to bottom, #fff 0%, #bcc8f3 100%);
-    padding: 3px;
-        }
-
-        #table-detail_filter input[type="search"]{
-            height:30px;
-        }
-
-</style>
-
 
 <div class="row line-box-number">
 
@@ -227,11 +78,7 @@
             <div class="col-lg-12 line-header"><span class="title-header">Danh sách chi tiết</span></div>
         </div>
         <div id="table-country">
-<<<<<<< HEAD
             <table class="table table-sm table-bordered table-striped" id="table-detail">
-=======
-            <table class="table table-sm table-bordered">
->>>>>>> e297f337ea4e1541bdc32d5eb759ab607ca7bbdb
                 <thead>
                     <tr>
                         <th>
@@ -302,51 +149,295 @@
     </div>
 </div>
 <div class="row bar-chart">
-     <div class="col-lg-12">
+    <div class="col-lg-12">
         <canvas id="chart-canvas" height="400" width="800"></canvas>
-     </div>
+    </div>
+</div>
+
+<div class="row pie-chart">
+    <div class="col-sm">
+        <canvas id="pie-canvas-1" height="80" width="80"></canvas>
+        <div class="title-chart">New Confirmed</div>
+    </div>
+    <div class="col-sm">
+        <canvas id="pie-canvas-2" height="80" width="80"></canvas>
+        <div class="title-chart">Total Confirmed</div>
+    </div>
+    <div class="col-sm">
+        <canvas id="pie-canvas-3" height="80" width="80"></canvas>
+        <div class="title-chart">Total death</div>
+    </div>
+    <div class="col-sm">
+        <canvas id="pie-canvas-4" height="80" width="80"></canvas>
+        <div class="title-chart">Total recovered</div>
+    </div>
 </div>
 
 @section Scripts{
     <script>
         (function ($) {
-            var main = function(){
-                var render_table = function(){
+            var main = function () {
+                this.render_table = function () {
                     $('#table-detail').DataTable(
-                                    {
-                                        "info":false,
-                                        "lengthChange":false,
-                                        "pageLength": 25,
-                                        "pagingType": "full_numbers",
-                                        "language":{
-                                            "search":"Tìm kiếm",
+                        {
+                            "info": false,
+                            "lengthChange": false,
+                            "pageLength": 25,
+                            "pagingType": "full_numbers",
+                            "language": {
+                                "search": "Tìm kiếm",
+                            }
+                        }
+                    );
+                };
+                this.render_bar_chart = function () {
+                    var promise = new Promise(function (resolve, reject) {
+                        $.ajax({
+                            url: '/Home/GetJsonCountry',
+                            type: 'GET',
+                            success: function (data) {
+                                resolve(Array.from(data).slice(0, 5));
+                            },
+                            error: function (err) {
+                                console.log(err.responseText);
+                            }
+                        });
+                    });
+                    promise.then(function (data) {
+                        var arrLabel = [];
+                        var arrNewConfirm = [], arrTotalConfirm = [], arrNewDeath = [], arrTotalDeath = [], arrNewRecovered = [], arrTotalRecovered = [];
+
+                        $.each(data, function (key, item) {
+                            arrLabel.push(item.country);
+                            arrNewConfirm.push(item.newConfirmed);
+                            arrTotalConfirm.push(item.totalConfirmed);
+                            arrNewDeath.push(item.newDeaths);
+                            arrTotalDeath.push(item.totalDeaths);
+                            arrNewRecovered.push(item.newRecovered);
+                            arrTotalRecovered.push(item.totalRecovered);
+                        });
+
+                        var datasets = [
+
+                            { label: "New Confirmed", backgroundColor: 'rgba(255, 99, 132, 0.5)', data: arrNewConfirm },
+                            { label: "Total Confirmed", backgroundColor: 'rgba(54, 162, 235, 0.5)', data: arrTotalConfirm },
+                            { label: "New Death", backgroundColor: 'rgba(255, 206, 86, 0.5)', data: arrNewDeath },
+                            { label: "Total Death", backgroundColor: 'rgba(75, 192, 192, 0.5)', data: arrTotalDeath },
+                            { label: "New Recovered", backgroundColor: 'rgba(153, 102, 255, 0.5)', data: arrNewRecovered },
+                            { label: "Total Recovered", backgroundColor: 'rgba(255, 159, 64, 0.5)', data: arrTotalRecovered },
+                        ];
+
+                        var ctx = $('#chart-canvas')[0].getContext('2d');
+                        var bar_chart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: arrLabel,
+                                datasets: datasets
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            callback: function (value, index, values) {
+                                                return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                                            }
+                                        }
+                                    }]
+                                },
+                                tooltips: {
+                                    callbacks: {
+                                        label: function (tooltipItem, data) {
+                                            var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+                                            label += ' ' + tooltipItem.yLabel.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                                            return label;
                                         }
                                     }
-                                );
-                };
-                var render_bar_chart = function(){
-                    var ctx = $('#chart-canvas').getContext('2d');
-                    var bar_chart = new Chart(ctx,{
-                        type: 'bar',
-                        data: {
-                            labels: ["2015-01", "2015-02", "2015-03", "2015-04", "2015-05", "2015-06", "2015-07", "2015-08", "2015-09", "2015-10", "2015-11", "2015-12"],
-                            datasets: [{
-                                label: '# of Tomatoes',
-                                data: [12, 19, 3, 5, 2, 3, 20, 3, 5, 6, 2, 1],
-                            }],
-                        },
+                                },
+                                plugins: {
+                                    datalabels: {
+                                        // hide datalabels for all datasets
+                                        display: false
+                                    }
+                                }
+                            }
+                        });
                     });
-                    
-                };
 
-                var run = function(){
+
+
+                };
+                this.render_pie_chart = function () {
+                    var promise = new Promise(function (resolve, reject) {
+                        $.ajax({
+                            url: '/Home/GetJsonCountry',
+                            type: 'GET',
+                            success: function (data) {
+                                resolve(Array.from(data));
+                            },
+                            error: function (err) {
+                                console.log(err.responseText);
+                            }
+                        });
+                    });
+                    promise.then(function (data) {
+                        var arrLabel = [];
+                        var arrNewConfirm = [], arrTotalConfirm = [], arrTotalDeath = [], arrTotalRecovered = [];
+
+                        var arrSortByNewConfirmed = Array.from(data).sort((a, b) => (a.newConfirmed < b.newConfirmed) ? 1 : -1);
+
+                        $.each(arrSortByNewConfirmed.slice(0, 4), function (key, item) {
+                            arrLabel.push(item.country);
+                            arrNewConfirm.push(item.newConfirmed);
+                        });
+
+                        arrLabel.push("Còn lại");
+                        arrNewConfirm.push(arrSortByNewConfirmed.slice(5, arrSortByNewConfirmed.length - 1).map(x => x.newConfirmed).reduce((a, b) => a + b));
+                        /********************************************* */
+
+                        var options = {
+                            tooltips: {
+                                enabled: false
+                            },
+                            plugins: {
+                                datalabels: {
+                                    formatter: (value, ctx) => {
+                                        let datasets = ctx.chart.data.datasets;
+                                        if (datasets.indexOf(ctx.dataset) === datasets.length - 1) {
+                                            let sum = datasets[0].data.reduce((a, b) => a + b, 0);
+                                            let percentage = Math.round((value / sum) * 100) + '%';
+                                            return percentage;
+                                        } else {
+                                            return percentage;
+                                        }
+                                    },
+                                    color: '#fff',
+                                }
+                            }
+                        };
+
+                        var ctx = $('#pie-canvas-1')[0].getContext('2d');
+                        var pie_chart = new Chart(ctx, {
+                            type: 'pie',
+                            responsive: true,
+                            data: {
+                                labels: arrLabel,
+                                datasets: [{
+                                    backgroundColor: [
+                                        "#2ecc71",
+                                        "#3498db",
+                                        "#95a5a6",
+                                        "#9b59b6",
+                                        "#f1c40f",
+                                    ],
+                                    data: arrNewConfirm
+                                }]
+                            },
+                            options: options,
+
+                        });
+
+                        /********************** */
+                        arrLabel.length = 0;
+                        var arrSortByTotalConfirmed = Array.from(data).sort((a, b) => (a.totalConfirmed < b.totalConfirmed) ? 1 : -1);
+                        $.each(arrSortByTotalConfirmed.slice(0, 4), function (key, item) {
+                            arrLabel.push(item.country);
+                            arrTotalConfirm.push(item.totalConfirmed);
+                        });
+                        arrLabel.push("Còn lại");
+                        arrTotalConfirm.push(arrSortByTotalConfirmed.slice(5, arrSortByTotalConfirmed.length - 1).map(x => x.totalConfirmed).reduce((a, b) => a + b));
+                        /******************************************************** */
+
+                        var ctx2 = $('#pie-canvas-2')[0].getContext('2d');
+
+                        var pie_chart2 = new Chart(ctx2, {
+                            type: 'pie',
+                            data: {
+                                labels: arrLabel,
+                                datasets: [{
+                                    backgroundColor: [
+                                        "#4b77a9",
+                                        "#5f255f",
+                                        "#d21243",
+                                        "#B27200",
+                                        "#f1c40f",
+                                    ],
+                                    data: arrTotalConfirm
+                                }]
+                            },
+                            options: options,
+
+                        });
+
+                        /********************************** */
+                        arrLabel.length = 0;
+                        var arrSortByTotalDeath = Array.from(data).sort((a, b) => (a.totalDeaths < b.totalDeaths) ? 1 : -1);
+                        $.each(arrSortByTotalDeath.slice(0, 4), function (key, item) {
+                            arrLabel.push(item.country);
+                            arrTotalDeath.push(item.totalDeaths);
+                        });
+                        arrLabel.push("Còn lại");
+                        arrTotalDeath.push(arrSortByTotalDeath.slice(5, arrSortByTotalDeath.length - 1).map(x => x.totalDeaths).reduce((a, b) => a + b));
+
+                        var ctx3 = $('#pie-canvas-3')[0].getContext('2d');
+                        var pie_chart3 = new Chart(ctx3, {
+                            type: 'pie',
+                            data: {
+                                labels: arrLabel,
+                                datasets: [{
+                                    backgroundColor: [
+                                        "#f1c40f",
+                                        "#e74c3c",
+                                        "#34495e",
+                                        "#9b59b6",
+                                        "#2ecc71",
+                                    ],
+                                    data: arrTotalDeath
+                                }]
+                            },
+                            options: options,
+                        });
+
+                        /***********************************/
+                        arrLabel.length = 0;
+                        var arrSortByTotalRecovered = Array.from(data).sort((a, b) => (a.totalRecovered < b.totalRecovered) ? 1 : -1);
+                        $.each(arrSortByTotalRecovered.slice(0, 4), function (key, item) {
+                            arrLabel.push(item.country);
+                            arrTotalRecovered.push(item.totalRecovered);
+                        });
+                        arrLabel.push("Còn lại");
+                        arrTotalRecovered.push(arrSortByTotalRecovered.slice(5, arrSortByTotalRecovered.length - 1).map(x => x.totalRecovered).reduce((a, b) => a + b));
+
+                        var ctx4 = $('#pie-canvas-4')[0].getContext('2d');
+                        var pie_chart4 = new Chart(ctx4, {
+                            type: 'pie',
+                            data: {
+                                labels: arrLabel,
+                                datasets: [{
+                                    backgroundColor: [
+                                        "#f1c40f",
+                                        "#e74c3c",
+                                        "#34495e",
+                                        "#9b59b6",
+                                        "#2ecc71",
+                                    ],
+                                    data: arrTotalRecovered
+                                }]
+                            },
+                            options: options,
+                        });
+                    });
+                };
+                this.run = function () {
+
                     this.render_table();
                     this.render_bar_chart();
+                    this.render_pie_chart();
                 };
 
-                run();
+                this.run();
             };
-            
+
             new main();
 
 
