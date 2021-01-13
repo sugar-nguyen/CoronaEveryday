@@ -181,6 +181,7 @@
                     $('#table-detail').DataTable(
                         {
                             "info": false,
+                            "order":[[2,'desc']],
                             "lengthChange": false,
                             "pageLength": 25,
                             "pagingType": "full_numbers",
@@ -356,10 +357,10 @@
                                 labels: arrLabel,
                                 datasets: [{
                                     backgroundColor: [
-                                        "#4b77a9",
-                                        "#5f255f",
-                                        "#d21243",
-                                        "#B27200",
+                                        "#2ecc71",
+                                        "#3498db",
+                                        "#95a5a6",
+                                        "#9b59b6",
                                         "#f1c40f",
                                     ],
                                     data: arrTotalConfirm
@@ -386,11 +387,11 @@
                                 labels: arrLabel,
                                 datasets: [{
                                     backgroundColor: [
-                                        "#f1c40f",
-                                        "#e74c3c",
-                                        "#34495e",
-                                        "#9b59b6",
                                         "#2ecc71",
+                                        "#3498db",
+                                        "#95a5a6",
+                                        "#9b59b6",
+                                        "#f1c40f",
                                     ],
                                     data: arrTotalDeath
                                 }]
@@ -415,11 +416,11 @@
                                 labels: arrLabel,
                                 datasets: [{
                                     backgroundColor: [
-                                        "#f1c40f",
-                                        "#e74c3c",
-                                        "#34495e",
-                                        "#9b59b6",
                                         "#2ecc71",
+                                        "#3498db",
+                                        "#95a5a6",
+                                        "#9b59b6",
+                                        "#f1c40f",
                                     ],
                                     data: arrTotalRecovered
                                 }]
@@ -431,7 +432,7 @@
                 this.run = function () {
 
                     this.render_table();
-                    this.render_bar_chart();
+                   // this.render_bar_chart();
                     this.render_pie_chart();
                 };
 

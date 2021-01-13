@@ -26,16 +26,26 @@ namespace CoronaEveryday.Controllers
 
         public async Task<IActionResult> Index()
         {
-            
             var model = await _client.GetSummaryAsync();
-            return View(model);
+            if (model.Global != null)
+            {
+                var accessDb = new AccessDb(_configuration.GetConnectionString("CovidDb"));
+                accessDb.InsertData(model);
+                return View(model);
+
+            }
+
+            return Content("Api death.");
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetJsonCountry()
+        public JsonResult GetJsonCountry()
         {
-            var model = await _client.GetSummaryAsync();
-            return Json(model.Countries.OrderByDescending(x=>x.NewConfirmed));
+           
+            var accessDb = new AccessDb(_configuration.GetConnectionString("CovidDb"));
+            var model = accessDb.GetAlLCountries();
+
+            return Json(model.OrderByDescending(x=>x.NewConfirmed));
         }
 
         public IActionResult Privacy()
