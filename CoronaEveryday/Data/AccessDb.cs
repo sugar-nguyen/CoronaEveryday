@@ -127,17 +127,47 @@ namespace CoronaEveryday.Data
             return rowEfftedResult;
         }
 
+        public IEnumerable<Global> GetAllGlobal()
+        {
+            connection.Open();
+            List<Global> globals = new List<Global>();
+            string sql = "select * from GET_ALL_GLOBAL";
+            using (var cmd = new SqlCommand(sql, connection))
+            {
+                cmd.CommandType = CommandType.Text;
+
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Global global = new Global()
+                    {
+                        Date = reader.GetDateTime("Date"),
+                        NewConfirmed = reader.GetInt32("NewConfirmed"),
+                        TotalConfirmed = reader.GetInt32("TotalConfirmed"),
+                        NewRecovered = reader.GetInt32("NewRecovered"),
+                        TotalRecovered = reader.GetInt32("TotalRecovered"),
+                        NewDeaths = reader.GetInt32("NewDeaths"),
+                        TotalDeaths = reader.GetInt32("TotalDeaths")
+                    };
+                    globals.Add(global);
+                }
+            }
+
+            connection.Close();
+            return globals;
+        }
         public IEnumerable<Countries> GetAlLCountries()
         {
             connection.Open();
             List<Countries> countries = new List<Countries>();
             string sql = "select * from GET_ALL_COUNTRIES";
-            using(var cmd = new SqlCommand(sql, connection))
+            using (var cmd = new SqlCommand(sql, connection))
             {
                 cmd.CommandType = CommandType.Text;
                 var reader = cmd.ExecuteReader();
 
-                
+
                 while (reader.Read())
                 {
                     Countries country = new Countries()
@@ -153,7 +183,42 @@ namespace CoronaEveryday.Data
                     };
 
                     countries.Add(country);
-                   
+
+                }
+            }
+
+            connection.Close();
+            return countries;
+        }
+
+        public IEnumerable<Countries> GetAllCountriesByDate(DateTime date)
+        {
+            connection.Open();
+            List<Countries> countries = new List<Countries>();
+            string sql = "select * from GET_ALL_COUNTRIES_BY_DATE(@date)";
+            using (var cmd = new SqlCommand(sql, connection))
+            {
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.Add("@date",SqlDbType.Date).Value = date.Date;
+
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Countries country = new Countries()
+                    {
+                        CountryCode = reader["CountryCode"].ToString(),
+                        Country = reader["Country"].ToString(),
+                        NewConfirmed = reader.GetInt32("NewConfirmed"),
+                        TotalConfirmed = reader.GetInt32("TotalConfirmed"),
+                        NewRecovered = reader.GetInt32("NewRecovered"),
+                        TotalRecovered = reader.GetInt32("TotalRecovered"),
+                        NewDeaths = reader.GetInt32("NewDeaths"),
+                        TotalDeaths = reader.GetInt32("TotalDeaths")
+                    };
+
+                    countries.Add(country);
+
                 }
             }
 

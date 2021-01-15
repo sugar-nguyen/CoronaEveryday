@@ -85,9 +85,6 @@
                             @Html.DisplayNameFor(model => model.Countries[0].Country)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Countries[0].CountryCode)
-                        </th>
-                        <th>
                             @Html.DisplayNameFor(model => model.Countries[0].NewConfirmed)
                         </th>
                         <th>
@@ -116,9 +113,6 @@
                         <tr>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Country)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CountryCode)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.NewConfirmed)
@@ -181,7 +175,7 @@
                     $('#table-detail').DataTable(
                         {
                             "info": false,
-                            "order":[[2,'desc']],
+                            "order":[[1,'desc']],
                             "lengthChange": false,
                             "pageLength": 25,
                             "pagingType": "full_numbers",
@@ -286,8 +280,7 @@
                         var arrNewConfirm = [], arrTotalConfirm = [], arrTotalDeath = [], arrTotalRecovered = [];
 
                         var arrSortByNewConfirmed = Array.from(data).sort((a, b) => (a.newConfirmed < b.newConfirmed) ? 1 : -1);
-
-                        $.each(arrSortByNewConfirmed.slice(0, 4), function (key, item) {
+                        $.each(arrSortByNewConfirmed.slice(0,4), function (key, item) {
                             arrLabel.push(item.country);
                             arrNewConfirm.push(item.newConfirmed);
                         });
@@ -429,11 +422,80 @@
                         });
                     });
                 };
+                this.render_line_char = function () {
+                    var promise = new Promise(function (resolve, reject) {
+                        $.ajax({
+                            url: '/Home/GetGlobal',
+                            type: 'GET',
+                            success: function (data) {
+                                resolve(data);
+                            },
+                            error: function (err) {
+                                console.log(err.responseText);
+                            }
+                        });
+                    });
+                    promise.then(function (data) {
+                        var arrLabel = [];
+                        var arrNewConfirm = [], arrNewDeath = [],arrNewRecored=[];
+
+                        $.each(data, function (key, item) {
+                            var date = new Date(Date.parse(item.date));
+                            arrLabel.push((date.getUTCDate()+1) + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+                            arrNewConfirm.push(item.newConfirmed);
+                            arrNewDeath.push(item.newDeaths);
+                            arrNewRecored.push(item.newRecovered);
+                        });
+
+                        var datasets = [
+                            { label: "Mới phát hiện", borderColor: '#2ecc71', data: arrNewConfirm, fill: false },
+                            { label: "Không qua khỏi", borderColor: '#d60000', data: arrNewDeath, fill: false },
+                            { label: "Hồi phục", borderColor: '#5dc1ef', data: arrNewRecored, fill: false },
+                        ];
+
+                        var ctx = $('#chart-canvas')[0].getContext('2d');
+                        var line_chart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: arrLabel,
+                                datasets: datasets
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            callback: function (value, index, values) {
+                                                return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                                            }
+                                        }
+                                    }]
+                                },
+                                tooltips: {
+                                    callbacks: {
+                                        label: function (tooltipItem, data) {
+                                            var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+                                            label += ' ' + tooltipItem.yLabel.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                                            return label;
+                                        }
+                                    }
+                                },
+                                plugins: {
+                                    datalabels: {
+                                        // hide datalabels for all datasets
+                                        display: false
+                                    }
+                                }
+                            }
+                        });
+                    });
+                };
                 this.run = function () {
 
                     this.render_table();
                    // this.render_bar_chart();
                     this.render_pie_chart();
+                    this.render_line_char();
                 };
 
                 this.run();

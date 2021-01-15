@@ -28,6 +28,10 @@ namespace CoronaEveryday.Models
         [DisplayFormat(DataFormatString = "{0:#,00}", ApplyFormatInEditMode = true)]
         public int TotalRecovered { get; set; }
 
-        
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime Date { get; set; }
+
+
     }
 }

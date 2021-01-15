@@ -39,13 +39,21 @@ namespace CoronaEveryday.Controllers
         }
 
         [HttpGet]
+        public JsonResult GetGlobal()
+        {
+            var accessDb = new AccessDb(_configuration.GetConnectionString("CovidDb"));
+            var model = accessDb.GetAllGlobal().OrderBy(x=>x.Date);
+            return Json(model);
+        }
+
+        [HttpGet]
         public JsonResult GetJsonCountry()
         {
            
             var accessDb = new AccessDb(_configuration.GetConnectionString("CovidDb"));
-            var model = accessDb.GetAlLCountries();
+            var model = accessDb.GetAllCountriesByDate(DateTime.Now);
 
-            return Json(model.OrderByDescending(x=>x.NewConfirmed));
+            return Json(model);
         }
 
         public IActionResult Privacy()
